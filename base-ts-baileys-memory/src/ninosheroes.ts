@@ -155,7 +155,7 @@ const fotosRenta = addKeyword('csfxcfhgcdvjbkjnklmñaiui6356')
     .addAnswer(`Baño`, { media: join(process.cwd(), 'assets/Sept2024', 'Baño1.jpg') })  
     .addAnswer(`Baño`, { media: join(process.cwd(), 'assets/Sept2024', 'Baño2.jpg') })  
     .addAnswer(`Baño`, { media: join(process.cwd(), 'assets/Sept2024', 'Baño3.jpg') })  
-
+    .addAnswer(`Recorrido`, { media: join(process.cwd(), 'assets/Sept2024', 'VID-20240901-WA0009.mp4') })  
     .addAction(async (_,{gotoFlow}) => {
         await delay(5000)
         return gotoFlow(flujoCalculaDistancia)
