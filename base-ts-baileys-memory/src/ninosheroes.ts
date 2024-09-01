@@ -141,8 +141,21 @@ const welcomeFlow = addKeyword<Provider, Database>(['informes','información', '
          })
          
 const fotosRenta = addKeyword('csfxcfhgcdvjbkjnklmñaiui6356')
-    .addAnswer(`Fachada propiedad`, { media: join(process.cwd(), 'assets', 'descarga.jpeg') })
-    .addAnswer(`Sala propiedad`, { media: join(process.cwd(), 'assets', 'Sala.webp') })    
+    .addAnswer(`Sala comedor`, { media: join(process.cwd(), 'assets/Sept2024', 'SalaComedor1.jpg') })
+    .addAnswer(`Cocina`, { media: join(process.cwd(), 'assets/Sept2024', 'Cocina1.jpg') })
+    .addAnswer(`Cocina`, { media: join(process.cwd(), 'assets/Sept2024', 'Cocina2.jpg') })
+    .addAnswer(`Cocina`, { media: join(process.cwd(), 'assets/Sept2024', 'Cocina3.jpg') })
+    .addAnswer(`Zotehuela`, { media: join(process.cwd(), 'assets/Sept2024', 'Zotehuela3.jpg') })
+    .addAnswer(`Recamara`, { media: join(process.cwd(), 'assets/Sept2024', 'Recamara1.jpg') })    
+    .addAnswer(`Recamara`, { media: join(process.cwd(), 'assets/Sept2024', 'Recamara2.jpg') })    
+    .addAnswer(`Recamara`, { media: join(process.cwd(), 'assets/Sept2024', 'Recamara4.jpg') })    
+    .addAnswer(`Recamara`, { media: join(process.cwd(), 'assets/Sept2024', 'Recamara5.jpg') })    
+    .addAnswer(`Recamara`, { media: join(process.cwd(), 'assets/Sept2024', 'Recamara6.jpg') })    
+    .addAnswer(`Recamara`, { media: join(process.cwd(), 'assets/Sept2024', 'Recamara7.jpg') })  
+    .addAnswer(`Baño`, { media: join(process.cwd(), 'assets/Sept2024', 'Baño1.jpg') })  
+    .addAnswer(`Baño`, { media: join(process.cwd(), 'assets/Sept2024', 'Baño2.jpg') })  
+    .addAnswer(`Baño`, { media: join(process.cwd(), 'assets/Sept2024', 'Baño3.jpg') })  
+
     .addAction(async (_,{gotoFlow}) => {
         await delay(5000)
         return gotoFlow(flujoCalculaDistancia)
