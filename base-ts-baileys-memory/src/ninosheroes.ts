@@ -170,7 +170,9 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
             async (ctx,{gotoFlow, state}) => {
                   const locationData = ctx.message.locationMessage;
                   const ubicacionProspecto = { latitude: locationData.degreesLatitude, longitude: locationData.degreesLongitude };
-                  const distancia = await haversine(ubicacionProspecto, {"longitude": 19.611719, "latitude": 99.198404})/1000
+                  console.log(ubicacionProspecto)
+                  const ubicacionProspiedad = {"longitude": 19.611719, "latitude": 99.198404}
+                  const distancia = await haversine(ubicacionProspecto, ubicacionProspiedad)/1000
                   await state.update({distanciaCalculada: distancia});
                   console.log(distancia / 1000)
         
@@ -180,10 +182,10 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
     
     const flujoLlamada = addKeyword(EVENTS.ACTION)
     .addAnswer('Calculando...', null, async (_, {state, flowDynamic}) => {
-        const distancia = state.get('distanciaCalculada')
+        const distanciaTotal = state.get('distanciaCalculada')
         await delay(2000)
         await flowDynamic([
-            `La distancia desde su ubicación es de ${distancia/1000} Kms. `,
+            `La distancia desde su ubicación es de ${distanciaTotal/1000} Kms. `,
             '¿Cumple con los requisitos? ¿Le interesa rentar esta propiedad? si  así lo desea podemos contactarle telefónicamente para atender sus preguntas',
             '¿Gusta que le llamemos?',
             '1️⃣ para *Si*',
