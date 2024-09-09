@@ -162,19 +162,21 @@ const fotosRenta = addKeyword('csfxcfhgcdvjbkjnklmñaiui6356')
     })
 
 const flujoCalculaDistancia = addKeyword('675765CalculaDistanciauytuygbytuytw657658')
-         .addAnswer(['Para algunos clientes la distancia es importante, quizás actualmente renta y quiere un espacio cercano al que habita, por lo anterior, y si lo desea envíe su ubicación actual y le diremos qué tan distante se encuentra, así podrá elegir inteligentemente.','1 SI', '2 NO'], {capture: true})
-         .addAction(async (ctx,{gotoFlow,flowDynamic }) => {
+         .addAnswer(['Para algunos clientes la distancia es importante, quizás actualmente renta y quiere un espacio cercano al que habita, por lo anterior, y si lo desea envíe su ubicación actual y le diremos qué tan distante se encuentra, así podrá elegir inteligentemente.','1️⃣ SI', '2️⃣ NO'], {capture: true})
+         .addAction(async (ctx,{gotoFlow}) => {
             const respuesta = ctx.body.toLowerCase()
             if(respuesta === '1' || respuesta === 'si')
             {
-                await flowDynamic('Perfecto, por favor envíe su ubicación actual (su información no será guardada en nuestros servidores)');
+                return gotoFlow(flujoRespuetaUbicacion);
             }
-            else
-            {
+            if(respuesta === '2' || respuesta === 'no')
+                {
                 return gotoFlow(flujoLlamada);
             }
          });
 
+const flujoRespuetaUbicacion = addKeyword('hsgjaguytwuygbosuab787382y+_')
+.addAnswer('Perfecto, por favor envíe su ubicación actual (su información no será guardada en nuestros servidores)')
 
 
 const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
@@ -253,7 +255,7 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
 
 
 const main = async () => {
-    const adapterFlow = createFlow([QRScannedFlow, flujoRenta, requisitosRenta, fotosRenta, flujoLlamada, flujoUbica, flujoRegistraLlamada, welcomeFlow])
+    const adapterFlow = createFlow([QRScannedFlow, flujoRenta, requisitosRenta, fotosRenta, flujoLlamada, flujoUbica, flujoRegistraLlamada, flujoRespuetaUbicacion, welcomeFlow])
     const adapterProvider = createProvider(Provider, {name:'RealStateBot'})
     const adapterDB = new Database()
 
