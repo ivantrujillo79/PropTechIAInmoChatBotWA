@@ -163,18 +163,19 @@ const fotosRenta = addKeyword('csfxcfhgcdvjbkjnklmñaiui6356')
 
 const flujoCalculaDistancia = addKeyword('675765CalculaDistanciauytuygbytuytw657658')
          .addAnswer(['Para algunos clientes la distancia es importante, quizás actualmente renta y quiere un espacio cercano al que habita, por lo anterior, y si lo desea envíe su ubicación actual y le diremos qué tan distante se encuentra, así podrá elegir inteligentemente.','1️⃣ SI', '2️⃣ NO'], {capture: true})
-         .addAction(async (ctx,{gotoFlow}) => {
-            const respuesta = ctx.body.toLowerCase()
-            console.log(respuesta);
-            if(respuesta === '1' || respuesta === 'si')
-            {
-                return gotoFlow(flujoRespuetaUbicacion);
-            }
-            if(respuesta === '2' || respuesta === 'no')
+         .addAction(
+            async (ctx,{gotoFlow}) => {
+                const respuesta = ctx.body.toLowerCase()
+                console.log(respuesta);
+                if(respuesta === '1' || respuesta === 'si')
                 {
-                return gotoFlow(flujoLlamada);
-            }
-         });
+                    return gotoFlow(flujoRespuetaUbicacion);
+                }
+                if(respuesta === '2' || respuesta === 'no')
+                    {
+                    return gotoFlow(flujolamada);
+                }
+            });
 
 const flujoRespuetaUbicacion = addKeyword('hsgjaguytwuygbosuab787382y+_')
 .addAnswer('Perfecto, por favor envíe su ubicación actual (su información no será guardada en nuestros servidores)')
@@ -190,11 +191,11 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
                   await state.update({distanciaCalculada: distancia});
                   console.log(distancia / 1000)
         
-                return gotoFlow(flujoLlamada);
+                return gotoFlow(flujoUbicacionLlamada);
             });
     
     
-    const flujoLlamada = addKeyword(EVENTS.ACTION)
+    const flujoUbicacionLlamada = addKeyword(EVENTS.ACTION)
     .addAnswer('Calculando...', null, async (_, {state, flowDynamic}) => {
         const distanciaTotal = state.get('distanciaCalculada')
         await delay(2000)
@@ -207,35 +208,62 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
     ].join('\n'))
     })
     .addAnswer('', {capture: true},) 
-    .addAction(async (ctx, {gotoFlow, fallBack, endFlow}) => {
-        const userResponse = ctx.body
+    .addAction(
+        async (ctx, {gotoFlow, fallBack, endFlow}) => {
+            const userResponse = ctx.body
         
 
-        if(userResponse === '1' || userResponse.toLowerCase() === 'si')
-        {
-            return gotoFlow(flujoRegistraLlamada)
+            if(userResponse === '1' || userResponse.toLowerCase() === 'si')
+            {
+                return gotoFlow(flujoRegistraLlamada)
 
-        }
-        if(userResponse === '2' || userResponse.toLowerCase() === 'no')
-        {
-            return endFlow(`De acuerdo, y recuerde escribir INFORMES para que pueda atenderlo nuevamente, que tenga buen día.`)
-        }
-        return fallBack('1 para si o 2 para no')
-    })
+            }
+            if(userResponse === '2' || userResponse.toLowerCase() === 'no')
+            {
+                return endFlow(`De acuerdo, y recuerde escribir INFORMES para que pueda atenderlo nuevamente, que tenga buen día.`)
+            }
+            return fallBack('1 para si o 2 para no')
+        })
+
+
+        const flujolamada = addKeyword(EVENTS.ACTION)
+        .addAnswer(['¿Cumple con los requisitos? ¿Le interesa rentar esta propiedad? si  así lo desea podemos contactarle telefónicamente para atender sus preguntas',
+                '¿Gusta que le llamemos?',
+                '1️⃣ para *Si*',
+                '2️⃣ para *No*'
+        ])
+        .addAnswer('', {capture: true},) 
+        .addAction(
+            async (ctx, {gotoFlow, fallBack, endFlow}) => {
+                const userResponse = ctx.body
+    
+                if(userResponse === '1' || userResponse.toLowerCase() === 'si')
+                {
+                    return gotoFlow(flujoRegistraLlamada)
+    
+                }
+                if(userResponse === '2' || userResponse.toLowerCase() === 'no')
+                {
+                    return endFlow(`De acuerdo, y recuerde escribir INFORMES para que pueda atenderlo nuevamente, que tenga buen día.`)
+                }
+                return fallBack('1 para si o 2 para no')
+            })
+    
 
 
     const flujoRegistraLlamada = addKeyword(EVENTS.ACTION)
-    .addAction(async (ctx, {flowDynamic})=> {
-        const numeroProspecto = ctx.from
-        const options = {
-            host: 's1z8h8ijff.execute-api.us-east-2.amazonaws.com',
-            port: 443,
-            path: '/dev/lead',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          };
+    .addAction(
+        async (ctx, {flowDynamic})=> {
+            const numeroProspecto = ctx.from
+            const options = {
+                host: 's1z8h8ijff.execute-api.us-east-2.amazonaws.com',
+                port: 443,
+                path: '/dev/lead',
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                }
+            };
 
           const postData = JSON.stringify({"Lead_ID":numeroProspecto})
 
@@ -256,7 +284,7 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
 
 
 const main = async () => {
-    const adapterFlow = createFlow([QRScannedFlow, flujoRenta, requisitosRenta, fotosRenta, flujoLlamada, flujoUbica, flujoRegistraLlamada, flujoRespuetaUbicacion, welcomeFlow])
+    const adapterFlow = createFlow([QRScannedFlow, flujoRenta, requisitosRenta, fotosRenta, flujoUbicacionLlamada, flujoUbica, flujoRegistraLlamada, flujoCalculaDistancia, flujoRespuetaUbicacion, flujolamada, welcomeFlow])
     const adapterProvider = createProvider(Provider, {name:'RealStateBot'})
     const adapterDB = new Database()
 
