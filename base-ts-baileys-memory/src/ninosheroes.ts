@@ -167,7 +167,7 @@ const flujoCalculaDistancia = addKeyword('675765CalculaDistanciauytuygbytuytw657
             const respuesta = ctx.body.toLowerCase()
             if(respuesta === '1' || respuesta === 'si')
             {
-                return flowDynamic('Perfecto, por favor envíe su ubicación actual (su información no será guardada en nuestros servidores)');
+                await flowDynamic('Perfecto, por favor envíe su ubicación actual (su información no será guardada en nuestros servidores)');
             }
             else
             {
