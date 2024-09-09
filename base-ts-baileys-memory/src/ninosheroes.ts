@@ -162,7 +162,18 @@ const fotosRenta = addKeyword('csfxcfhgcdvjbkjnklmñaiui6356')
     })
 
 const flujoCalculaDistancia = addKeyword('675765CalculaDistanciauytuygbytuytw657658')
-         .addAnswer('Para algunos clientes la distancia es importante, quizás actualmente renta y quiere un espacio cercano al que habita, por lo anterior, y si lo desea envíe su ubicación actual y le diremos qué tan distante se encuentra, así podrá elegir inteligentemente.');
+         .addAnswer(['Para algunos clientes la distancia es importante, quizás actualmente renta y quiere un espacio cercano al que habita, por lo anterior, y si lo desea envíe su ubicación actual y le diremos qué tan distante se encuentra, así podrá elegir inteligentemente.','1 SI', '2 NO'], {capture: true})
+         .addAction(async (ctx,{gotoFlow,flowDynamic }) => {
+            const respuesta = ctx.body.toLowerCase()
+            if(respuesta === '1' || respuesta === 'si')
+            {
+                return flowDynamic('Perfecto, por favor envíe su ubicación actual (su información no será guardada en nuestros servidores)');
+            }
+            else
+            {
+                return gotoFlow(flujoLlamada);
+            }
+         });
 
 
 
