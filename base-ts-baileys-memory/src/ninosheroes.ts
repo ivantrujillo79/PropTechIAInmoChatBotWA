@@ -165,6 +165,7 @@ const flujoCalculaDistancia = addKeyword('675765CalculaDistanciauytuygbytuytw657
          .addAnswer(['Para algunos clientes la distancia es importante, quizás actualmente renta y quiere un espacio cercano al que habita, por lo anterior, y si lo desea envíe su ubicación actual y le diremos qué tan distante se encuentra, así podrá elegir inteligentemente.','1️⃣ SI', '2️⃣ NO'], {capture: true})
          .addAction(async (ctx,{gotoFlow}) => {
             const respuesta = ctx.body.toLowerCase()
+            console.log(respuesta);
             if(respuesta === '1' || respuesta === 'si')
             {
                 return gotoFlow(flujoRespuetaUbicacion);
