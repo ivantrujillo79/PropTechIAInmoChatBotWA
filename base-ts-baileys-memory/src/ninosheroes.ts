@@ -49,7 +49,7 @@ const QRScannedFlow = addKeyword<Provider, Database>('lciLxvv%2fP0e5dMiJ61hFsg%3
     }
 )
 
-const welcomeFlow = addKeyword<Provider, Database>(['informes','información', 'informacion', 'datos', 'hola', 'costo', 'precio'])
+const welcomeFlow = addKeyword<Provider, Database>(['informes','información', 'informacion', 'datos', 'costo', 'precio'])
     .addAnswer([
                     '🙌 Hola, soy el robot de Trujillo Bienes Raíces 🏘️🏢🏭'
                     ,'le atenderé para darle información acerca de las propiedades disponibles'
@@ -227,7 +227,7 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
 
 
         const flujolamada = addKeyword(EVENTS.ACTION)
-        .addAnswer(['¿Cumple con los requisitos? ¿Le interesa rentar esta propiedad? si  así lo desea podemos contactarle telefónicamente para atender sus preguntas',
+        .addAnswer(['¿Cumple con los requisitos? ¿Le interesa rentar o comprar esta propiedad? si  así lo desea podemos contactarle telefónicamente para atender sus preguntas y agendar una cita',
                 '¿Gusta que le llamemos?',
                 '1️⃣ para *Si*',
                 '2️⃣ para *No*'
@@ -280,11 +280,63 @@ const flujoUbica = addKeyword(EVENTS.LOCATION).addAction(
     })
     .addAnswer('Registrando su llamada, espere.')
 
-    const flujoCompra = addKeyword(EVENTS.ACTION).addAnswer('INFORMACIÓN para comprador')
+    const flujoCompra = addKeyword(EVENTS.ACTION)
+    .addAnswer(['El departamento se encuentra ubicado en la colonia Niños Heroes, ', 
+                'Municipio de Cuautitlán Izcalli, es una tercer planta que cuenta con todos los servicios',
+                'Electricidad, Agua, Drenaje, Gas natural (conexión al rentar), un lugar de estacionamiento',
+                'El internet, teléfono y T.V. por cable es contratado por los inquilinos',
+                'Excelentemente ubicado: Perinorte a 5 Min., Planta Ford a 15 Min. Planta Coca-Cola 20 Min.',
+                'Conectado a las principales vías de comunicación, Periférico, Tren suburbano, Autopista Chamapa',
+                'Vía López Portillo'
+     ])
+     .addAnswer(['¿Desea conocer los requisitos para comprarlo?',
+                '1️⃣ para *SI*',
+                '2️⃣ para *NO*'
+     ].join('\n'),{capture: true},)
+     .addAction(async (ctx, {fallBack, gotoFlow, endFlow}) => {
+        const userResponse = ctx.body
+
+        if(userResponse === '1' || userResponse.toLowerCase() === 'si')
+        {
+            return gotoFlow(requisitosVenta)
+        }
+        if( userResponse === '2' || userResponse.toLowerCase() === 'no')
+        {
+            return endFlow(`De acuerdo, y recuerde escribir INFORMES para que pueda atenderle nuevamente, que tenga buen día.`)
+        }
+        return fallBack('1 para si o 2 para no')
+     })
+
+     const requisitosVenta = addKeyword('djhsgiagbuiy237y88iynheudhlujdddddddddd')
+     .addAnswer(['El departamento es vendido tras la visita y apartado (firma de pagaré mediante)',
+                 'Copia de identificación oficial y comprobante de domicilio',
+                 'La compra puede realizarse a través de crédito INFONAVIT, ISSSTE, Bancario o Recurso propio',
+                 'Es requisito cubra un monto de $4,000.00 por concepto de valuación en caso de proceder con crédito',
+                 'El departamente se entrega con todos los servicios e impuestos pagados',
+                 'El comprador puede elegir el servicio notarial en Cuautitlán, Cuautitlán Izcalli o Tlalnepantla de su elección.']
+             )
+     .addAnswer(['¿Desea ver fotos de la propiedad?',
+                 '1️⃣ para *SI*',
+                 '2️⃣ para *NO*'
+      ].join('\n'),{capture: true},)
+      .addAction(async (ctx, {fallBack, gotoFlow, endFlow}) => {
+         const userResponse = ctx.body
+
+         if(userResponse === '1' || userResponse.toLowerCase() === 'si')
+         {
+             return gotoFlow(fotosRenta)
+         }
+         if( userResponse === '2' || userResponse.toLowerCase() === 'no')
+         {
+             return endFlow(`De acuerdo, y recuerde escribir INFORMES para que pueda atenderlo nuevamente, que tenga buen día.`)
+         }
+         return fallBack('1 para si o 2 para no')
+      })
+
 
 
 const main = async () => {
-    const adapterFlow = createFlow([QRScannedFlow, flujoRenta, requisitosRenta, fotosRenta, flujoUbicacionLlamada, flujoUbica, flujoRegistraLlamada, flujoCalculaDistancia, flujoRespuetaUbicacion, flujolamada, welcomeFlow])
+    const adapterFlow = createFlow([QRScannedFlow, flujoCompra, flujoRenta, requisitosVenta, requisitosRenta, fotosRenta, flujoUbicacionLlamada, flujoUbica, flujoRegistraLlamada, flujoCalculaDistancia, flujoRespuetaUbicacion, flujolamada, welcomeFlow])
     const adapterProvider = createProvider(Provider, {name:'RealStateBot'})
     const adapterDB = new Database()
 
